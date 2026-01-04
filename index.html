@@ -3,23 +3,118 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
     <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      body {
+        background-color: burlywood;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 60px;
+      }
+      .header-desc {
+        font-size: 13px;
+        width: 50%;
+        text-align: center;
+        margin: auto;
+      }
+      input[type="search"] {
+        height: 60px;
+        width: 60%;
+        background-color: white;
+        border: 1px solid #eee;
+        border-radius: 25px;
+        margin: 20px auto;
+        display: flex;
+        outline: burlywood;
+        padding: 0px 10px;
+      }
+      #container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+      .card-container {
+        width: 300px;
+        height: 400px;
+        border-radius: 15px;
+        border: 1px solid #eee;
+        background-color: bisque;
+      }
+      .card-container img {
+        width: 100%;
+        border-radius: 15px;
+      }
+      .card-container .mealname,
+      .card-container .category {
+        font-size: 20px;
+        font-weight: bold;
+        padding: 10px;
+      }
+    </style>
   </head>
   <body>
-    <div class="container">
-      <div class="top" >
-        <div class="box1 top1"></div>
-        <div class="box2 top2"></div>
-      </div>
-      <div class="bottom" >
-        <div class="bottom1 box3"></div>
-        <div class="bottom2 box4"></div>
-        <div class="bottom3 box5"></div>
-      </div>
-    </div>
-
-   
-    
+    <h1>THE FOOD STORE</h1>
+    <p class="header-desc">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum rem
+      doloremque sunt quasi, vitae ipsum cum reprehenderit aliquid et.
+      Exercitationem, velit! Suscipit repudiandae aspernatur, ullam velit eius
+      aliquam. Odio, pariatur.
+    </p>
+    <input type="search" name="" id="" />
+    <div id="container"></div>
   </body>
+
+  <script>
+    const API_URL = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
+    const API_URL_SINGLE =
+      "https://www.themealdb.com/api/json/v1/1/lookup.php?i={mealID}";
+
+    const container = document.getElementById("container");
+    const fetchAllMeals = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        console.log(data);
+
+        const mealsData = data.meals;
+        console.log(mealsData)
+      if(mealsData.length <= 0){
+        console.log("No Data Available")
+      }else{
+          mealsData.map((meal, index) => {
+          const cardContainer = document.createElement("div");
+          cardContainer.className = "card-container";
+          const p1 = document.createElement("p");
+          p1.className = "mealname";
+          const category = document.createElement("p");
+          category.className = "category";
+          const img = document.createElement("img");
+          img.src = meal.strMealThumb;
+          p1.textContent = "Name:" + meal.strMeal;
+          category.textContent = "Cartegory: " + meal.strCategory;
+
+          cardContainer.appendChild(img);
+          cardContainer.appendChild(p1);
+          cardContainer.appendChild(category);
+          container.appendChild(cardContainer);
+        });
+      }
+      } catch (err) {
+        const info = document.createElement("p")
+        info.textContent = "No Data Available"
+        container.appendChild(info)
+        console.log(err);
+      }
+    };
+    fetchAllMeals();
+  </script>
 </html>
